@@ -1,0 +1,24 @@
+The initial conditions that allow a successful landing are dependant on the system's boundaries.
+I.e.: on the maximum thrust - the more thrust the rocket has the higher the starting velocities allowed
+on the amount of propellant (in this case it is simulated through a maximum landing time) - the more time you have the further away
+you can start your landing.
+the maximum gimbal angle - the higher it is the higher the starting angular velocity and pitch allowed.
+
+You can see the limits for the velocities were computed through the low of conservation of momentum and the minimum landing distance
+through the kinematic equations of motion. This assume the initial conditions are decoupled so their only valid when you vary each individually.
+
+
+What are the key limiting factors preventing the controller to land the rocket with
+ a larger subset of initial states, or a better accuracy? What type of Guidance and Control (G&C)
+ architecture would be better? 
+
+ To achieve a larger subset of initial states one would have to increase the capacity of the actuators (maximum thrust and gimbal angle)
+ or the amount of propellant (maximum time horizon). For a better accuracy, a better initial guess, a more precise integrator (such as implicit RK4)
+ and higher number of time steps are needed. This optimal control approach should in therory find the best solution, however the solver used
+ (IPOPT) is not quaranteed to find the global minimum and sometimes gives a local minimum instead, that is why a good initial conditions is important.
+ 
+ I dont believe there is a beter G&C approach than optimal control. Of course once you close the loop, this approach can no longer be used do to its 
+ high computational overhead. Instead an MPC can be used, with a trajectory generated a priori with this controller serving as reference.
+ Additionally, an MRAC controller could be used for fault tolerance, allowing the controller to adapt to changes in the dynamics or
+ simply unmodelled dynamics. Either that or a fault detection and identification system which updates the dynamics, and a new optimal 
+ trajectory is computed and replaces the nominal reference.

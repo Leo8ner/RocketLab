@@ -1,0 +1,29 @@
+The selected controller is an optimal controller. 
+In most cases it performes better than a PID constroller as it optimizes the trajectory as a whole.
+It is more complex and slower, however, this is not a problem when the goal is just to generate a reference trajectory for guidance.
+To convert this into a real-time controller, the horizon whould have to be fixed and reduced, and then the controller would be called at a fixed rate
+updating the state in a closed loop -> AKA an MPC.
+
+The selected weights for each of the components of the cost function are:
+# Cost function weights
+W_x               = 1                  # Weight for horizontal position---------, -
+W_z               = 1                  # Weight for vertical position-----------, -
+W_theta           = 1                  # Weight for pitch angle-----------------, -
+W_vx              = 1                  # Weight for horizontal velocity---------, -
+W_vz              = 1                  # Weight for vertical velocity-----------, -
+W_wy              = 1                  # Weight for angular velocity------------, -
+W_T               = 1                  # Weight for engine thrust---------------, -
+W_gim             = 1                  # Weight for gimbal angle----------------, -
+W_T_rate          = 1                  # Weight for engine throttle rate--------, -
+W_gim_rate        = 1                  # Weight for gimbal rate-----------------, -
+W_H               = 10                 # Weight for time horizon----------------, -
+
+The reasoning behind them is just that we want every state to be reduced to 0, with no specific priority.
+If the used propellant mass was a state it would be the priority. The altitude and vertically velocity are already constrained
+to 0 at the final state, so their weights are irrelevant.
+
+The trust and gimbal rate weights are just there to guide the solver to a smoother trajectory, reduce actuator strain and reduce failure rates.
+
+The time horizon weight is the most relevant as it ensures the solver converges within the time limit.
+Additionally, the faster you land, the least propellant you consume, so minimizing landing time and minimizing
+consumed propellant are almost analogous.
