@@ -1,1 +1,0 @@
-# Time-Opimal-Attitude-Control
