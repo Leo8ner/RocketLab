@@ -2,39 +2,35 @@
 #define DYNAMICS_H
 
 #include <casadi/casadi.hpp>
-#include <rlab/symmetric_spacecraft.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <stdexcept>
-#include <filesystem>
+#include <rlab/simulation_parameters.h>
 
 using namespace casadi;
 
-class ExplicitDynamics {
+class Dynamics {
 
-    SX X, U, dt;
+    bool is_implicit;
+    bool actuator_dynamics;
+    SX X, U, dt, X_dot;
+    Function F, f; 
+    int n_X, n_U;
+
+    void setupDynamicsWithoutTVC(); // Setup dynamics without thrust vector control dynamics
+    void setupDynamicsWithTVC();    // Setup dynamics with thrust vector control dynamics
+    void setupIntegrator();           // Setup the integrator function
 
 public:
-    Function F; 
+    // Constructor
+    Dynamics(bool is_implicit = false, bool actuator_dynamics = false); 
 
-    ExplicitDynamics();
+    // Getters
+    Function getDiscreteDynamics() const;   // Returns the discrete dynamics function F
+    Function getContinuousDynamics() const; // Returns the continuous dynamics function f
+    int getStateDim() const;                      // Returns the number of states
+    int getInputDim() const;                      // Returns the number of controls
+
 };
-
-struct ImplicitDynamics {
-    
-    Function F; 
-
-    ImplicitDynamics();
-};
-
-// Takes a 3D vector w and returns a 4x4 skew-symmetric matrix
-SX skew4(const SX& w);
 
 // RK4 integrator
 SX rk4(const SX& x_dot, const SX& x, const SX& dt);
-
-// Function getDynamics();
 
 #endif // DYNAMICS_H

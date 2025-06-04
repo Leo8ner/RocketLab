@@ -61,7 +61,7 @@ endif()
 # find the following packages
 find_package(Threads REQUIRED)
 
-add_library(rlab STATIC src/lib/optimizer.cpp src/lib/dynamics.cpp src/lib/constraints.cpp src/lib/plots.cpp)
+add_library(rlab STATIC src/lib/dynamics.cpp src/lib/optimizer.cpp src/lib/opt_setup.cpp)
 target_include_directories(
     rlab PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/rlab
 )
@@ -78,10 +78,10 @@ file(GLOB HEADER_FILES_HPP ${CMAKE_SOURCE_DIR}/include/*.hpp)
 file(GLOB HEADER_FILES_H ${CMAKE_SOURCE_DIR}/include/*.h)
 file(GLOB HEADER_FILES_H ${CMAKE_SOURCE_DIR}/include/rlab/*.h)
 
-add_executable(GenerateCode src/c_code_gen.cpp)
+#add_executable(GenerateCode src/c_code_gen.cpp)
 # Link the executable to the CasADi library
-target_link_libraries(GenerateCode PRIVATE ${CASADI_LIBRARIES} ${IPOPT_LIBRARIES} rlab)
-target_include_directories(GenerateCode PRIVATE ${CASADI_INCLUDE_DIRS} ${IPOPT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/rlab)
+#target_link_libraries(GenerateCode PRIVATE ${CASADI_LIBRARIES} ${IPOPT_LIBRARIES} rlab)
+#target_include_directories(GenerateCode PRIVATE ${CASADI_INCLUDE_DIRS} ${IPOPT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/rlab)
 
 add_executable(Main src/main.cpp)
 
@@ -89,16 +89,16 @@ add_executable(Main src/main.cpp)
 target_link_libraries(Main PRIVATE ${CASADI_LIBRARIES} rlab)
 target_include_directories(Main PRIVATE ${CASADI_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/rlab)
 
-add_executable(MainCodeGen src/main_code_gen.cpp)
+#add_executable(MainCodeGen src/main_code_gen.cpp)
 
 # Link the executable to the CasADi library
-target_link_libraries(MainCodeGen PRIVATE ${CASADI_LIBRARIES} rlab)
-target_include_directories(MainCodeGen PRIVATE ${CASADI_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/rlab)
+#target_link_libraries(MainCodeGen PRIVATE ${CASADI_LIBRARIES} rlab)
+#target_include_directories(MainCodeGen PRIVATE ${CASADI_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/rlab)
 
 # Runs GenerateCode automatically after build
-add_custom_target(run_codegen
-    COMMAND GenerateCode
-    DEPENDS GenerateCode
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Running GenerateCode automatically after build"
-)
+# add_custom_target(run_codegen
+#     COMMAND GenerateCode
+#     DEPENDS GenerateCode
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#     COMMENT "Running GenerateCode automatically after build"
+# )
