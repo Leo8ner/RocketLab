@@ -46,6 +46,7 @@ class Optimizer {
     DM lb_X, ub_X, lb_U, ub_U;
     DM U_max, U_rate_max;
     DM X_max;
+    Function solver;
 
     bool implicit, gim_dyn;
     std::string guess;

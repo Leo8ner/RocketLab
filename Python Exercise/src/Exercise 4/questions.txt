@@ -4,9 +4,12 @@ on the amount of propellant (in this case it is simulated through a maximum land
 you can start your landing.
 the maximum gimbal angle - the higher it is the higher the starting angular velocity and pitch allowed.
 
-You can see the limits for the velocities were computed through the low of conservation of momentum and the minimum landing distance
-through the kinematic equations of motion. This assume the initial conditions are decoupled so their only valid when you vary each individually.
+You can see the limits for the velocities were computed through the law of conservation of momentum and the minimum landing distance
+through the kinematic equations of motion. This assumes the initial conditions are decoupled so their only valid when you vary each individually.
 
+Maximum initial angular velocity: 145.33 deg/s
+Maximum initial linear velocity: 146.65 m/s
+Maximum distance depends on velocity. See graphs
 
 What are the key limiting factors preventing the controller to land the rocket with
  a larger subset of initial states, or a better accuracy? What type of Guidance and Control (G&C)

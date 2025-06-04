@@ -20,6 +20,7 @@ p_i   = I_max - p_f                                                # Maximum all
 v_0   = p_i / m                                                    # Maximum initial linear velocity ----, m/s
 # Generate angles for circle
 theta = np.linspace(0, 2 * np.pi, 500)
+print("Maximum initial linear velocity:", v_0, "m/s")
 
 # Parametric equations for a circle of radius v_0 -> v_0** = vz_max**2 + vx_max**2
 vx = v_0 * np.cos(theta)
@@ -191,4 +192,5 @@ ax.set_title('Minimum Required Initial Altitude vs Initial Velocity')
 ax.view_init(elev=20, azim=45)
 
 plt.tight_layout()
+
 plt.show()

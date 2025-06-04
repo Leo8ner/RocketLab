@@ -3,7 +3,7 @@ import numpy as np
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
-src_dir = os.path.abspath(os.path.join(current_dir, '..\..'))
+src_dir = os.path.abspath(os.path.join(current_dir, '../..'))
 sys.path.append(src_dir)
 from lib.dynamics.dynamics import Dynamics
 from lib.controller.setup import OptimizationSetup
@@ -77,32 +77,25 @@ class Optimizer:
         T_max_vec = self.dt * throttle_rate
         objective = 0
 
-        if self.implicit:  # If implicit dynamics are used
-            for k in range(N_steps):
-                X_kp1 = self.F(x0 = self.X_all[:, k], u = self.U[:, k], p = self.dt[k])['xf']                        # Next state
-                self.opti.subject_to(self.X_all[:, k + 1] == X_kp1)          # Dynamics constraints RK4
-                objective += ca.bilin(self.R, self.U[:, k])              # Control cost
-                #objective += ca.bilin(self.D, U_rate)                    # Control rate cost
-        else:  # If explicit dynamics are used
-            for k in range(N_steps-1):
-                # Control rate constraints
-                if self.N_X == 8:  # If no actuator dynamics are included
-                    self.opti.subject_to(
-                    self.opti.bounded(self.U[0, k] - T_max_vec[k], self.U[0, k + 1], T_max_vec[k] + self.U[0, k])
-                    )
-                    U_rate = (self.U[:, k + 1] - self.U[:, k]) / self.dt[k]                   # Control rate
-                    objective += ca.bilin(self.D, U_rate)                    # Control rate cost
-                X_kp1 = self.F(self.X_all[:, k], self.U[:, k], self.dt[k])                        # Next state
-                self.opti.subject_to(self.X_all[:, k + 1] == X_kp1)          # Dynamics constraints RK4
-                objective += ca.bilin(self.R, self.U[:, k])              # Control cost
+        for k in range(N_steps-1):
+            # Control rate constraints
             if self.N_X == 8:  # If no actuator dynamics are included
-                U_rate = (self.U[:, -1] - self.U[:, -1]) / self.dt[-1]                   # Control rate
+                self.opti.subject_to(
+                self.opti.bounded(self.U[0, k] - T_max_vec[k], self.U[0, k + 1], T_max_vec[k] + self.U[0, k])
+                )
+                U_rate = (self.U[:, k + 1] - self.U[:, k]) / self.dt[k]                   # Control rate
                 objective += ca.bilin(self.D, U_rate)                    # Control rate cost
-            X_kp1 = self.F(self.X_all[:, -2], self.U[:, -1], self.dt[-1])                        # Next state
-            self.opti.subject_to(self.X_all[:, -1] == X_kp1)          # Dynamics constraints RK4
-            objective += ca.bilin(self.R, self.U[:, -1])              # Control cost
+            X_kp1 = self.F(self.X_all[:, k], self.U[:, k], self.dt[k])                        # Next state
+            self.opti.subject_to(self.X_all[:, k + 1] == X_kp1)          # Dynamics constraints RK4
+            objective += ca.bilin(self.R, self.U[:, k])              # Control cost
+        if self.N_X == 8:  # If no actuator dynamics are included
+            U_rate = (self.U[:, -1] - self.U[:, -1]) / self.dt[-1]                   # Control rate
+            objective += ca.bilin(self.D, U_rate)                    # Control rate cost
+        X_kp1 = self.F(self.X_all[:, -2], self.U[:, -1], self.dt[-1])                        # Next state
+        self.opti.subject_to(self.X_all[:, -1] == X_kp1)          # Dynamics constraints RK4
+        objective += ca.bilin(self.R, self.U[:, -1])              # Control cost
         objective += ca.bilin(self.Q, self.X[:, -1])                 # Final state cost    
-        objective += ca.bilin(self.H, self.M)                        # Time horizon cost
+        objective += ca.bilin(self.M, self.H)                        # Time horizon cost
 
         if self.guess:
             self._set_initial_guess()  # Set initial guess if provided
@@ -215,6 +208,8 @@ class Optimizer:
                 rows = zip_longest(opt_dt, opt_X[0], opt_X[1], opt_X[2], opt_X[3], opt_X[4], opt_X[5], 
                                    opt_X[6], opt_X[7], opt_U[0], opt_U[1])
             write.writerows(rows)  # Write transposed data
+
+        
 
             file.close()            
         return result

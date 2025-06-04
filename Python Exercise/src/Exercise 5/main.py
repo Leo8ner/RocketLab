@@ -1,6 +1,4 @@
 import casadi as ca
-import matplotlib.pyplot as plt
-import numpy as np
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -40,7 +38,7 @@ setup = OptimizationSetup()  # Initialize the optimization setup
 
 # Optimization problem
 opt   = Optimizer(dyn, setup, guess="guess.csv")
-results = opt.solve(console_print = True, plot = True, save_traj = True, save_plots=True) # Solve the optimization problem
+results = opt.solve(console_print = True, plot = True, save_traj = True, save_plots=False) # Solve the optimization problem
 
 
 print(f"Minimum required maximum thrust: {min_T_max:.0f} N")

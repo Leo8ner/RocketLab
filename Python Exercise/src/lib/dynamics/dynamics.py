@@ -2,7 +2,7 @@ import casadi as ca
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
-src_dir = os.path.abspath(os.path.join(current_dir, '..\..'))
+src_dir = os.path.abspath(os.path.join(current_dir, '../..'))
 sys.path.append(src_dir)
 from simulation_parameters import *
 

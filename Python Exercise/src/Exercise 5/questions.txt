@@ -17,8 +17,8 @@ Question 6:
 
 Question 7:
     After implementing the actuator dynamics and comparing it to the results of the script for exercise 3 with the same random generation
-    seed for the initial conditions you can see how the rocket needs 5 seconds extra to land, but in turn the controller input is much smoother and
-    so is the optimal trajectory.
+    seed for the initial conditions you can see how the rocket needs 0.5 seconds extra to land, but in turn the controller input is much smoother and
+    so is the optimal trajectory. In other cases it can take significantly longer.
 
 Optional:
     derived wn and zeta by trial and error :/

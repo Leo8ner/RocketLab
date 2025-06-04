@@ -3,7 +3,7 @@ import sys
 import os
 import random
 current_dir = os.path.dirname(os.path.abspath(__file__))
-src_dir = os.path.abspath(os.path.join(current_dir, '..\..'))
+src_dir = os.path.abspath(os.path.join(current_dir, '../..'))
 sys.path.append(src_dir)
 from simulation_parameters import *
 
@@ -57,7 +57,7 @@ class OptimizationSetup:
         self.D_norm = ca.mtimes([self.D, U_rate_norm])
         
         # Time horizon normalization
-        self.H_max = ca.DM([H_0])
+        self.H_max = ca.DM([H_max])
         H_norm = ca.diag(1 / self.H_max**2)
         self.M_norm = ca.mtimes([self.M, H_norm])
     

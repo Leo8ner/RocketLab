@@ -1,5 +1,3 @@
-import casadi as ca
-import matplotlib.pyplot as plt
 import sys
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,8 +12,8 @@ from lib.controller.optimizer import Optimizer
 dyn = Dynamics(implicit=False, act_dyn=False) # Initialize the dynamics class
 
 ### Controller setup ###
-setup = OptimizationSetup()  # Initialize the optimization setup
+setup = OptimizationSetup(seed=10)  # Initialize the optimization setup
 
 # Optimization problem
 opt   = Optimizer(dyn, setup, guess="guess.csv")  # Initialize the optimizer with the dynamics and setup
-results = opt.solve(console_print = True, plot = True, save_traj=True, save_plots=False) # Solve the optimization problem
+results = opt.solve(console_print = True, plot = True, save_traj=True, save_plots=True) # Solve the optimization problem

@@ -73,7 +73,7 @@ X_dot_prop = ca.DM.zeros(N_X, N_steps)  # State derivatives trajectory
 dt_prop = np.ones(N_steps) * dt  # Time step trajectory (fixed dt case)
 
 for k in range(N_steps):
-    X_prop[:, k+1] = F(x0=X_prop[:, k], u=U_prop[:, k], p=dt)['xf']  # Next state using implicit RK4 with radau collocation integration
+    X_prop[:, k+1] = F(X_prop[:, k], U_prop[:, k], dt)  # Next state using explicit RK4 integration
     X_dot_prop[:, k] = f(X_prop[:, k], U_prop[:, k])  # State derivatives
     if X_prop[1, k+1] < 0:
         X_prop[:, k+1] = X_prop[:, k+1]*0
